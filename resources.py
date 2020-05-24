@@ -1,7 +1,8 @@
 from flask_restful import Resource, reqparse
 from models import UserModel
+from flask import jsonify
 
-from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_required, jwt_refresh_token_required, get_jwt_identity, get_raw_jwt)
+from flask_jwt_extended import (create_access_token, jwt_required, get_jwt_identity, get_raw_jwt)
 
 # flask_restful ha una libreria integrata per il parsing
 # possiamo usarla per effettuare verifiche sui campi obbligatori
@@ -9,6 +10,8 @@ from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_r
 parser = reqparse.RequestParser()
 parser.add_argument('username', help = 'Questo campo non può essere vuoto', required = True)
 parser.add_argument('password', help = 'Questo campo non può essere vuoto', required = True)
+parser.add_argument('ruolo', help = 'Questo campo non può essere vuoto', required = False)
+
 
 
 
@@ -19,7 +22,8 @@ class Registration(Resource):
         # Acquisisco i dati da JSON
         nuovo_utente = UserModel(
             username = data['username'],
-            password = data['password']
+            password = data['password'],
+            ruolo = data['ruolo']
         )
         # Controllo se l'utente è già presente su db
         if UserModel.cerca_su_db(data['username']):
@@ -29,7 +33,6 @@ class Registration(Resource):
             # Provo a creare un nuovo utente con i dati inviati nella post
             nuovo_utente.salva_sul_db()
             access_token = create_access_token(identity = data['username'])
-            refresh_token = create_refresh_token(identity = data['username'])
             return {
                 'message': 'Utente {} correttamente creato'.format( data['username']),
                 'access_token': access_token
@@ -51,7 +54,6 @@ class Login(Resource):
         
         if data['password'] == utente_loggato.password:
             access_token = create_access_token(identity = data['username'])
-            refresh_token = create_refresh_token(identity = data['username'])
             return {
                 'message': 'Hai effettuato l\'accesso come {}'.format(utente_loggato.username),
                 'access_token': access_token
@@ -72,6 +74,13 @@ class ListaUtenti(Resource):
 class CheckJWT(Resource):
     @jwt_required
     def get(self):
-        return {
-            'message': 'Sei riuscito ad accedere alla risorsa'
-        }
+        current_user = get_raw_jwt()
+        if not current_user['user_claims']:
+            return {'message': 'Benvenuto studente!'},200
+
+        if current_user['user_claims']['ruolo'] == 'root':
+            return {'message': 'Sei ufficialmente root'},200
+        elif current_user['user_claims']['ruolo'] == 'fake_root':
+            return {'message': 'Mi dispiace per te ma sei un fake root'},200
+
+   

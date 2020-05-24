@@ -26,8 +26,17 @@ from flask_jwt_extended import JWTManager
 jwt_app.config['JWT_SECRET_KEY'] = 'abc'
 jwt = JWTManager(jwt_app)
 
-
 import models, resources
+
+@jwt.user_claims_loader
+def add_claims_to_access_token(user):
+    ruolo_check = models.UserModel.cerca_su_db(user)
+    if  ruolo_check.ruolo == 'abcde':
+        return {'ruolo': 'root'}
+    elif ruolo_check.ruolo == 'root':
+        return {'ruolo': 'fake_root'}
+
+
 
 
 
@@ -35,7 +44,7 @@ import models, resources
 jwt_api.add_resource(resources.Registration, '/registration')
 jwt_api.add_resource(resources.Login, '/login')
 jwt_api.add_resource(resources.ListaUtenti, '/users')
-jwt_api.add_resource(resources.CheckJWT, '/secret')
+jwt_api.add_resource(resources.CheckJWT, '/scopriruolo')
 
 
 

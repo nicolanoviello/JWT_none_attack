@@ -1,11 +1,9 @@
 from flask_restful import Resource, reqparse
 from models import UserModel
 from flask import jsonify
-
-# --- Token da commentare ---
-"""
-from flask_jwt_extended import (create_access_token, jwt_required, get_jwt_identity, get_raw_jwt)
-"""
+import jwt
+import flask
+from jwtlib import encode_auth_token
 
 # flask_restful ha una libreria integrata per il parsing
 # possiamo usarla per effettuare verifiche sui campi obbligatori
@@ -14,8 +12,6 @@ parser = reqparse.RequestParser()
 parser.add_argument('username', help = 'Questo campo non può essere vuoto', required = True)
 parser.add_argument('password', help = 'Questo campo non può essere vuoto', required = True)
 parser.add_argument('ruolo', help = 'Questo campo non può essere vuoto', required = False)
-
-
 
 
 # qui è definita la lista di tutti gli endpoint da provare
@@ -59,16 +55,12 @@ class Login(Resource):
             return {'message': '{} non esiste'.format(data['username'])}
         
         if data['password'] == utente_loggato.password:
-            # --- Token da commentare ---
-            """
-            access_token = create_access_token(identity = data['username'])
+            
+            #payload = {'username':utente_loggato.username, 'role':utente_loggato.ruolo}
+            encode_jwt = encode_auth_token(utente_loggato)
             return {
                 'message': 'Hai effettuato l\'accesso come {}'.format(utente_loggato.username),
-                'access_token': access_token
-                }
-            """
-            return {
-                'message': 'Hai effettuato l\'accesso come {}'.format(utente_loggato.username),
+                'auth_token':encode_jwt
                 }
         else:
             return {'message': 'Credenziali sbagliate'}
@@ -87,7 +79,7 @@ class CheckJWT(Resource):
     # --- Token da commentare ---
     """
     @jwt_required
-    def get(self):
+    
         current_user = get_raw_jwt()
         if not current_user['user_claims']:
             return {'message': 'Benvenuto studente!'},200
@@ -97,6 +89,10 @@ class CheckJWT(Resource):
         elif current_user['user_claims']['ruolo'] == 'fake_root':
             return {'message': 'Mi dispiace per te ma sei un fake root'},200
     """
-    return {'message': 'Benvenuto!'},200
+    def get(self):
+        headers = flask.request.headers
+        token = str(headers['AUTHORIZATION']).replace("Bearer ",'')
+        message_received = instance.decode(token, signing_key)
+        return {'message': message_received}
 
    

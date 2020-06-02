@@ -3,7 +3,8 @@ from models import UserModel
 from flask import jsonify
 import jwt
 import flask
-from jwtlib import encode_auth_token
+from flask import request, Response
+from jwtlib import encode_auth_token, decode_auth_token, requires_auth
 
 # flask_restful ha una libreria integrata per il parsing
 # possiamo usarla per effettuare verifiche sui campi obbligatori
@@ -31,14 +32,6 @@ class Registration(Resource):
         try:
             # Provo a creare un nuovo utente con i dati inviati nella post
             nuovo_utente.salva_sul_db()
-            # --- Token da commentare ---
-            """
-            access_token = create_access_token(identity = data['username'])
-            return {
-                'message': 'Utente {} correttamente creato'.format( data['username']),
-                'access_token': access_token
-            }
-            """
         except:
             # Restituisco un errore 500
             return {'message': 'OPS. Qualcosa è andato storto.'}, 500
@@ -76,23 +69,13 @@ class ListaUtenti(Resource):
       
       
 class CheckJWT(Resource):
-    # --- Token da commentare ---
-    """
-    @jwt_required
-    
-        current_user = get_raw_jwt()
-        if not current_user['user_claims']:
-            return {'message': 'Benvenuto studente!'},200
-
-        if current_user['user_claims']['ruolo'] == 'root':
-            return {'message': 'Sei ufficialmente root'},200
-        elif current_user['user_claims']['ruolo'] == 'fake_root':
-            return {'message': 'Mi dispiace per te ma sei un fake root'},200
-    """
+    @requires_auth
     def get(self):
-        headers = flask.request.headers
-        token = str(headers['AUTHORIZATION']).replace("Bearer ",'')
-        message_received = instance.decode(token, signing_key)
-        return {'message': message_received}
-
-   
+        auth_token = request.headers.get('Authorization')
+        message_received = decode_auth_token(auth_token)
+        if not message_received.get('role'):
+            return {'message': 'Benvenuto studente!'},200
+        if message_received.get('role') == 'root':
+            return {'message': 'Sei ufficialmente root'},200
+        elif message_received.get('role') == 'fake_root':
+            return {'message': 'Mi dispiace per te ma sei un fake root'},200

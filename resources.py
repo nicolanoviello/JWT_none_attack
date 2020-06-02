@@ -2,7 +2,10 @@ from flask_restful import Resource, reqparse
 from models import UserModel
 from flask import jsonify
 
+# --- Token da commentare ---
+"""
 from flask_jwt_extended import (create_access_token, jwt_required, get_jwt_identity, get_raw_jwt)
+"""
 
 # flask_restful ha una libreria integrata per il parsing
 # possiamo usarla per effettuare verifiche sui campi obbligatori
@@ -32,11 +35,14 @@ class Registration(Resource):
         try:
             # Provo a creare un nuovo utente con i dati inviati nella post
             nuovo_utente.salva_sul_db()
+            # --- Token da commentare ---
+            """
             access_token = create_access_token(identity = data['username'])
             return {
                 'message': 'Utente {} correttamente creato'.format( data['username']),
                 'access_token': access_token
             }
+            """
         except:
             # Restituisco un errore 500
             return {'message': 'OPS. Qualcosa è andato storto.'}, 500
@@ -53,10 +59,16 @@ class Login(Resource):
             return {'message': '{} non esiste'.format(data['username'])}
         
         if data['password'] == utente_loggato.password:
+            # --- Token da commentare ---
+            """
             access_token = create_access_token(identity = data['username'])
             return {
                 'message': 'Hai effettuato l\'accesso come {}'.format(utente_loggato.username),
                 'access_token': access_token
+                }
+            """
+            return {
+                'message': 'Hai effettuato l\'accesso come {}'.format(utente_loggato.username),
                 }
         else:
             return {'message': 'Credenziali sbagliate'}
@@ -72,6 +84,8 @@ class ListaUtenti(Resource):
       
       
 class CheckJWT(Resource):
+    # --- Token da commentare ---
+    """
     @jwt_required
     def get(self):
         current_user = get_raw_jwt()
@@ -82,5 +96,7 @@ class CheckJWT(Resource):
             return {'message': 'Sei ufficialmente root'},200
         elif current_user['user_claims']['ruolo'] == 'fake_root':
             return {'message': 'Mi dispiace per te ma sei un fake root'},200
+    """
+    return {'message': 'Benvenuto!'},200
 
    

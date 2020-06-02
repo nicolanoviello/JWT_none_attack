@@ -1,8 +1,12 @@
 from flask import jsonify
 from flask import Flask
 from flask_restful import Api
+
+# --- Token da commentare ---
+"""
 jwt_app = Flask(__name__)
 jwt_api = Api(jwt_app)
+"""
 
 from flask_sqlalchemy import SQLAlchemy
 
@@ -17,16 +21,23 @@ db = SQLAlchemy(jwt_app)
 
 
 # Inizializzo il db prima di eseguire qualsiasi altra cosa
+
+# --- Token da commentare ---
+"""
 @jwt_app.before_first_request
+"""
+
 def create_tables():
     db.create_all()
 
+# --- Token da commentare ---
+"""
 # Inizializzo JWT
 from flask_jwt_extended import JWTManager
 jwt_app.config['JWT_SECRET_KEY'] = 'abc'
 jwt = JWTManager(jwt_app)
 
-import models, resources
+
 
 @jwt.user_claims_loader
 def add_claims_to_access_token(user):
@@ -35,8 +46,9 @@ def add_claims_to_access_token(user):
         return {'ruolo': 'root'}
     elif ruolo_check.ruolo == 'root':
         return {'ruolo': 'fake_root'}
+"""
 
-
+import models, resources
 
 
 

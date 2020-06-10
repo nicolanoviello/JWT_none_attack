@@ -14,16 +14,18 @@ $ mkdir jwt
 $ cd jwt
 
 # Si crea un ambiente denominato sicurezza2020
-$ virtualenv -p python3 sicurezza2020
-$ source sicurezza2020/bin/activate
+$ virtualenv -p python3 jwt_none
+$ source jwt_none/bin/activate
 
 # Si installano i pacchetti necessari alla creazione degli endpoint
-(sicurezza2020) $ pip install flask flask-restful flask-jwt-extended pylint-flask
+(jwt_none) $ pip install flask flask-restful flask-jwt-extended pylint-flask
 
 # Se si vuole lavorare su un db locale (nel nostro caso SQLLite) è necessario installare flask_sqlalchemy
 # che è in grado di gestire sia db locali che db su server remoti
-(sicurezza2020) $ pip install flask_sqlalchemy
+(jwt_none) $ pip install flask_sqlalchemy
 ```
+
+pip install jwt
 
 - Per lanciare il server è necessario eseguire questo comando
 

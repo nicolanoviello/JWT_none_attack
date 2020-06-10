@@ -1,6 +1,6 @@
 # Ignoro dir con env Anaconda
-sicurezza2020
-!sicurezza2020/lib/python3.7/site-packages/jwt/jwa.py
+jwt_none
+!jwt_none/lib/python3.7/site-packages/jwt/jwa.py
 # Ignoro file di compilazione
 __pycache__
 # Ignoro file di configurazione di Visual Studio Code

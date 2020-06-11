@@ -1,6 +1,7 @@
 # JWT_confusion_attack
 
 Progetto di sicurezza - Anno accademico 2019/2020
+
 Componente software in grado simulare un attacco di tipo None algorithm su Token JWT
 
 ## Creazione dell'environment per l'installazione del progetto
@@ -158,3 +159,19 @@ Il software implementato provvede ad esporre su *localhost*, sulla porta 3000, q
 
 L'header del JWT indica al server *come* verificare la firma del Token appena inviato. Inserendo quindi all'interno dell'header un algoritmo diverso si può "ingannare" il server e forzare a verificare la firma con l'algoritmo indicato.
 Inserendo il valore *none* nella chiave *alg* dell'header ed escludendo la terza parte del JWT, quella relativa alla firma (poiché di fatto l'algoritmo *none* non effettua nessuna firma) si può provare ad ingannare il server.
+
+Proviamo quindi a cambiare la stringa relativa all'Header con un nuovo JSON
+ ```
+ {
+  "typ": "JWT",
+  "alg": "none"
+}
+ ```
+ Che codificato risulta essere
+ ```
+ ewogICJ0eXAiOiAiSldUIiwKICAiYWxnIjogIm5vbmUiCn0
+ ```
+ Eliminiamo la terza parte, quella relativa alla firma (lasciando però il .), il nuovo JWT sarà quindi
+ ```
+ ewogICJ0eXAiOiAiSldUIiwKICAiYWxnIjogIm5vbmUiCn0.ewogICJ1c2VybmFtZSI6ICJzdHVkZW50ZV9zZW1wbGljZSIsCiAicnVvbG8iOiJyb290Igp9.
+ ```

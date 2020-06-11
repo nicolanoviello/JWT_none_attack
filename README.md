@@ -6,9 +6,9 @@ Componente software in grado simulare un attacco di tipo None algorithm su Token
 
 ## Creazione dell'environment per l'installazione del progetto
 
-- Il primo step prevede l'installazione di [Anaconda](https://www.anaconda.com/products/individual) disponibile per i principali sistemi operativi. Anaconda permette di creare ambienti python virtuali senza alterare le installazioni presenti sul sistema operativo principale
+- Il primo step prevede l'installazione di [Python](https://www.python.org/) e di [Virtualenv](https://virtualenv.pypa.io/en/latest/installation.html) disponibile per i principali sistemi operativi. Virtualenv permette di creare ambienti python virtuali senza alterare le installazioni presenti sul sistema operativo principale
 
-- Una volta installato Anaconda si può procedere all'attivazione dell'ambiente e all'installazione delle componenti necessarie
+- Una volta installato Virtualenv si può procedere all'attivazione dell'ambiente e all'installazione delle componenti necessarie
 
 ```
 # Si crea una directory per il progetto

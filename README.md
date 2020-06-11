@@ -203,3 +203,5 @@ Proviamo quindi a cambiare la stringa relativa all'Header con un nuovo JSON
  }
  ```
 ## Conclusioni
+
+Nelle buone pratiche di JWT è richiesta sempre una verifica riguardante i campi dell'Header e del Payload, specialmente  se riguardano aspetti legati alla sicurezza delle informazioni. Inoltre l'utilizzo di chiavi nel Payload eccessivamente "parlanti" può agevolare un ipotetico attaccante nell'individuazione di chiavi critiche per la sicurezza. È buona norma blindare le librerie e vincolarne l'uso esclusivamente al caso d'uso che si vuole applicare.

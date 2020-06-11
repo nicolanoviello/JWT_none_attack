@@ -73,9 +73,9 @@ class CheckJWT(Resource):
     def get(self):
         auth_token = request.headers.get('Authorization')
         message_received = decode_auth_token(auth_token)
-        if not message_received.get('role'):
+        if not message_received.get('ruolo'):
             return {'message': 'Benvenuto studente!'},200
-        if message_received.get('role') == 'abcde':
+        if message_received.get('ruolo') == 'abcde':
             return {'message': 'Sei ufficialmente root'},200
-        elif message_received.get('role') == 'root':
+        elif message_received.get('ruolo') == 'root':
             return {'message': 'Mi dispiace per te ma sei un fake root'},200

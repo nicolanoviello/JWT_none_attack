@@ -1,6 +1,5 @@
 # Ignoro dir con env Anaconda
 jwt_none
-!jwt_none/lib/python3.7/site-packages/jwt/jwa.py
 # Ignoro file di compilazione
 __pycache__
 # Ignoro file di configurazione di Visual Studio Code

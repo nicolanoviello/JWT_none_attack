@@ -1,4 +1,4 @@
-# JWT_confusion_attack
+# JWT_none_attack
 
 Progetto di sicurezza - Anno accademico 2019/2020
 

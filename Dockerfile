@@ -12,4 +12,4 @@ COPY ./libreria/jwa.py /usr/local/lib/python3.9/site-packages/jwt
 ENV FLASK_APP=start.py
 ENV FLASK_DEBUG=1
 
-CMD ["python", "-m", "flask", "run"]
+CMD ["python", "-m", "flask", "run", "--host", "0.0.0.0"]

@@ -1,6 +1,6 @@
-flask 
-flask-restful 
-flask-jwt-extended 
-flask_sqlalchemy
-jwt
-pylint-flask
+flask==1.1.2
+flask-restful==0.3.8 
+flask-jwt-extended==3.25.0 
+flask_sqlalchemy==2.4.4
+jwt==1.1.0
+pylint-flask==0.6

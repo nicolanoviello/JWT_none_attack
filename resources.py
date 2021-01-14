@@ -79,3 +79,7 @@ class CheckJWT(Resource):
             return {'message': 'Sei ufficialmente root'},200
         elif message_received.get('ruolo') == 'root':
             return {'message': 'Mi dispiace per te ma sei un fake root'},200
+
+class Status(Resource):
+    def get(self):
+        return {'message': 'Il Sistema funziona correttamente'},200

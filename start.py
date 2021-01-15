@@ -25,7 +25,7 @@ jwt_api.add_resource(resources.Registration, '/registration')
 jwt_api.add_resource(resources.Login, '/login')
 jwt_api.add_resource(resources.ListaUtenti, '/users')
 jwt_api.add_resource(resources.CheckJWT, '/scopriruolo')
-jwt_api.add_resource(resources.status, '/status')
+jwt_api.add_resource(resources.Status, '/status')
 
 
 

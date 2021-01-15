@@ -1,4 +1,4 @@
-# Ignoro dir con env Anaconda
+# Ignoro dir con env pip
 jwt_none
 # Ignoro file di compilazione
 __pycache__
@@ -7,3 +7,5 @@ __pycache__
 .vscode
 # Ignoro il db
 jwt_app.db
+# Ignoro la cache di pytest
+.pytest_cache

@@ -12,3 +12,5 @@ ENV FLASK_APP=start.py
 ENV FLASK_DEBUG=1
 
 CMD ["python", "-m", "flask", "run", "--host", "0.0.0.0"]
+#RUN pytest
+RUN flake8 /usr/src/app --count --select=E9,F63,F7 --show-source --statistics

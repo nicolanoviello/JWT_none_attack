@@ -3,8 +3,6 @@ name: ci
 on:
   push:
     branches: master
-  pull_request:
-    branches: master
 
 jobs:
   main:
@@ -29,6 +27,6 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: nicolanov/jwt_none:0.9
+          tags: nicolanov/jwt_none:master
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}

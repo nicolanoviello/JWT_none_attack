@@ -82,4 +82,4 @@ class CheckJWT(Resource):
 
 class Status(Resource):
     def get(self):
-        return {'message': 'Il Sistema funziona correttamente'},200
+        return {'message': 'Il Sistema funziona correttamente con il linter'},200

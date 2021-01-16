@@ -1,5 +1,5 @@
 from flask import jsonify
-from flask import Flask
+#from flask import Flask
 from flask_restful import Api
 jwt_app = Flask(__name__)
 jwt_api = Api(jwt_app)

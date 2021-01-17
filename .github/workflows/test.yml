@@ -36,7 +36,8 @@ jobs:
         uses: addnab/docker-run-action@v1
         with:
           image: nicolanov/jwt_none:test
-          #options: -d --name jwt-none-container-test -p 5000:5000
-          run: |
-            docker run -d  --name jwt-none-container-test -p 5000:5000 nicolanov/jwt_none:master
-            docker exec -it jwt-none-container-test ls
+          options: -d --name jwt-none-container-test -p 5000:5000
+          #run: |
+          #  docker run -d  --name jwt-none-container-test -p 5000:5000 nicolanov/jwt_none:master
+          #  docker exec -it jwt-none-container-test ls
+          run: /usr/bin/docker exec -it jwt-none-container-test ls

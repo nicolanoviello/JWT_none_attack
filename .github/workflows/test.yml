@@ -36,5 +36,5 @@ jobs:
         uses: addnab/docker-run-action@v1
         with:
           image: nicolanov/jwt_none:test
-          run: test
+          run: pytest
         

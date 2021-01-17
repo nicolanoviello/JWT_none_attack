@@ -5,7 +5,7 @@ jobs:
    machine: true
    steps:
      - checkout
-     - run: docker run -d --name jwt-none-container-test -p 5000:5000 nicolanov/jwt_none:master
+     - run: docker run -d --name jwt-none-container-test -p 5000:5000 nicolanov/jwt_none:test
      - run: docker container ls
      - run: sleep 6
      - run: docker exec -it jwt-none-container-test pytest

@@ -14,8 +14,6 @@ jobs:
         uses: addnab/docker-run-action@v1
         with:
           image: nicolanov/jwt_none:test
-          options: -p 5000:5000
-          shell: bash
           run: |
             sleep 6
             pytest

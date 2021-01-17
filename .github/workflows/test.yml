@@ -14,9 +14,8 @@ jobs:
         uses: addnab/docker-run-action@v1
         with:
           image: nicolanov/jwt_none:test
-          options: -d --name jwt-none-container-test -p 5000:5000 /bin/bash "sleep 6; pytest"
-          #run: |
-          #  /usr/bin/docker run -d  --name jwt-none-container-test -p 5000:5000 nicolanov/jwt_none:test
-          #  /usr/bin/docker container ls
-          #  docker exec -it jwt-none-container-test ls
-          #run: ls
+          options: -d --name jwt-none-container-test -p 5000:5000
+          shell: bash
+          run: |
+            sleep6
+            pytest
